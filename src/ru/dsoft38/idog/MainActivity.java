@@ -2,22 +2,41 @@ package ru.dsoft38.idog;
 
 import java.io.IOException;
 
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends SerialPortActivity {
 
+	Button btnUp;
+	Button btnDown;
+	Button btnLeft;
+	Button btnRight;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		sendData("_data1");
-		sendData("_data2");
-		sendData("_data3");
+		btnUp = (Button)findViewById(R.id.up);
+		btnDown = (Button)findViewById(R.id.down);
+		btnLeft = (Button)findViewById(R.id.left);
+		btnRight = (Button)findViewById(R.id.right);
+		
+		// устанавливаем один обработчик для всех кнопок
+		//btnUp.setOnClickListener();
+		//btnDown.setOnClickListener((OnClickListener) this);
+		//btnLeft.setOnClickListener((OnClickListener) this);
+		//btnRight.setOnClickListener((OnClickListener) this);
+		
+		//sendData("_data1");
+		//sendData("_data2");
+		//sendData("_data3");
 	}
 
 	@Override
@@ -52,6 +71,7 @@ public class MainActivity extends SerialPortActivity {
 	}
 	
 	private void sendData(String _data){
+		/*
 		int i;
 		
 		char[] text = new char[_data.length()];
@@ -59,13 +79,35 @@ public class MainActivity extends SerialPortActivity {
 			text[i] = _data.charAt(i);
 		}
 		int b = 110;
-		
+		*/
 		try {
-			mOutputStream.write(new String(text).getBytes());
-			mOutputStream.write(b);
-			mOutputStream.write('\n');
+			mOutputStream.write(_data.getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void btnClick(View v){
+		
+		// выводим сообщение
+	    Toast.makeText(this, "Зачем вы нажали?", Toast.LENGTH_SHORT).show();  
+	    
+	    switch (v.getId()) {
+		case R.id.up:
+			sendData("up"); //117112
+			break;
+		case R.id.down:
+			sendData("dw");	//100119	
+			break;
+		case R.id.left:
+			sendData("lf"); //108102
+			break;
+		case R.id.right:
+			sendData("rg"); //114103
+			break;
+		default:
+			break;
+		}
+		
 	}
 }
