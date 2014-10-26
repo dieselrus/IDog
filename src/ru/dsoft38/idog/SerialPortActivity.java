@@ -34,7 +34,7 @@ public abstract class SerialPortActivity extends Activity {
 
 	protected Application mApplication;
 	protected SerialPort mSerialPort;
-	protected OutputStream mOutputStream;
+	protected static OutputStream mOutputStream;
 	private InputStream mInputStream;
 	private ReadThread mReadThread;
 

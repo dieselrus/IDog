@@ -1,6 +1,12 @@
 package ru.dsoft38.idog;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +34,9 @@ public class MainActivity extends SerialPortActivity {
 		btnLeft = (Button)findViewById(R.id.left);
 		btnRight = (Button)findViewById(R.id.right);
 		
-		// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕРґРёРЅ РѕР±СЂР°Р±РѕС‚С‡РёРє РґР»СЏ РІСЃРµС… РєРЅРѕРїРѕРє
+		createTCPServer();
+		
+		// устанавливаем один обработчик для всех кнопок
 		//btnUp.setOnClickListener();
 		//btnDown.setOnClickListener((OnClickListener) this);
 		//btnLeft.setOnClickListener((OnClickListener) this);
@@ -70,7 +78,7 @@ public class MainActivity extends SerialPortActivity {
 		});
 	}
 	
-	private void sendData(String _data){
+	public static void sendData(String _data){
 		/*
 		int i;
 		
@@ -80,6 +88,7 @@ public class MainActivity extends SerialPortActivity {
 		}
 		int b = 110;
 		*/
+		System.out.println("send data:" + _data);
 		try {
 			mOutputStream.write(_data.getBytes());
 		} catch (IOException e) {
@@ -89,8 +98,8 @@ public class MainActivity extends SerialPortActivity {
 	
 	public void btnClick(View v){
 		
-		// РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ
-	    Toast.makeText(this, "Р—Р°С‡РµРј РІС‹ РЅР°Р¶Р°Р»Рё?", Toast.LENGTH_SHORT).show();  
+		// выводим сообщение
+	    Toast.makeText(this, v.getId(), Toast.LENGTH_SHORT).show();  
 	    
 	    switch (v.getId()) {
 		case R.id.up:
@@ -103,11 +112,19 @@ public class MainActivity extends SerialPortActivity {
 			sendData("lf"); //108102
 			break;
 		case R.id.right:
-			sendData("rg"); //114103
+			sendData("rg"); //114103 startActivity(new Intent(MainActivity.this, SerialPortPreferences.class));
+			break;
+		case R.id.btnSettings:
+			startActivity(new Intent(MainActivity.this, SerialPortPreferences.class));
 			break;
 		default:
 			break;
 		}
 		
+	}
+	
+	public static void createTCPServer(){
+		new TCPServerAsync().execute();
+		System.out.println("TCPServer create!");
 	}
 }
